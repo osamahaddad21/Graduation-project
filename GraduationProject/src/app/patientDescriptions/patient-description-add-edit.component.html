@@ -12,13 +12,26 @@
         <div *ngIf="f.patientId.errors.required">Patient is required</div>
       </div>
     </div>
+  </div>
+  <div class="form-row">
     <div class="form-group col">
       <label for="description">Description</label>
-      <input [disabled]="currentUser?.userRole == 'Patient'" type="text" formControlName="description" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f.description.errors }" />
+      <input [disabled]="currentUser?.userRole == 'Patient'" type="text" formControlName="description"
+        class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }" />
 
       <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
         <div *ngIf="f.description.errors.required">Description is required</div>
+      </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col">
+      <label for="medicineDescription">Medicine Description</label>
+      <input [disabled]="currentUser?.userRole == 'Patient'" type="text" formControlName="medicineDescription"
+        class="form-control" [ngClass]="{ 'is-invalid': submitted && f.medicineDescription.errors }" />
+
+      <div *ngIf="submitted && f.medicineDescription.errors" class="invalid-feedback">
+        <div *ngIf="f.medicineDescription.errors.required">Medicine Description is required</div>
       </div>
     </div>
   </div>
@@ -26,17 +39,33 @@
   <h1>Patient Medicines</h1>
   <div class="form-row">
     <div class="form-group col">
-      <label for="patientId">Medicine Name</label>
-      <select [disabled]="currentUser?.userRole == 'Patient'" class="form-control" [ngModelOptions]="{standalone: true}" (change)="Selected($event)" [(ngModel)]="selected">
+      <label for="patientId">Pharmacy Name</label>
+      <select [disabled]="currentUser?.userRole == 'Patient'" class="form-control" [ngModelOptions]="{standalone: true}"
+      (change)="SelectPharmacyMedicines($event)"  [(ngModel)]="pselected">
         <option disabled selected [value]="''">Please Select</option>
-        <option *ngFor="let pharmacyMedicine of pharmacyMedicines" [value]="pharmacyMedicine.id">
-          {{GetMedicineName(pharmacyMedicine.medicineId)}}/{{GetPharmacyName(pharmacyMedicine.pharmacyBranchId)}}
+        <option *ngFor="let pharmacyBranch of pharmacyBranches" [value]="pharmacyBranch.id">
+          {{GetPharmacyName(pharmacyBranch.id)}}
         </option>
       </select>
     </div>
     <div class="form-group col">
-      <label for="patientId">Inssurance Approve</label>
-      <select  class="form-control" [disabled]=" currentUser?.userRole == 'Physician' || currentUser?.userRole == 'Patient' "  [ngModelOptions]="{standalone: true}" (change)="InssuranceSelected($event)" [(ngModel)]="inssuranceSelected">
+      <label for="patientId">Medicine Name</label>
+      <select [disabled]="currentUser?.userRole == 'Patient'" class="form-control" [ngModelOptions]="{standalone: true}"
+        (change)="SelectMedicine($event)" [(ngModel)]="selected">
+        <option disabled selected [value]="''">Please Select</option>
+        <option *ngFor="let pharmacyMedicine of pharmacyMedicinesForPharmacy" [value]="pharmacyMedicine.id">
+          {{GetMedicineName(pharmacyMedicine.medicineId)}}
+        </option>
+      </select>
+    </div>
+
+  </div>
+  <div class="form-row" *ngIf="currentUser?.userRole != 'Physician'">
+    <div class="form-group col">
+      <label for="inssurance">Inssurance Approve</label>
+      <select class="form-control"
+        [disabled]=" currentUser?.userRole == 'Physician' || currentUser?.userRole == 'Patient' "
+        [ngModelOptions]="{standalone: true}" (change)="InssuranceSelected($event)" [(ngModel)]="inssuranceSelected">
         <option [value]="true">
           Approved
         </option>
@@ -45,8 +74,17 @@
         </option>
       </select>
     </div>
+    <div class="form-group col">
+      <label for="insurancePrecentage">Insurance Precentage</label>
+      <input type="number"  [(ngModel)]="insurancePrecentage"  (change)="ChangeMedicinePrice($event)" class="form-control" />
+    </div>
+    <div class="form-group col">
+      <label for="medicinePrice">Medicine Price</label>
+      <input disabled type="number"  [(ngModel)]="medicinePrice" class="form-control"/>
+    </div>
   </div>
-  <button type="button" [disabled]="currentUser?.userRole == 'Patient'" (click)="onSubmit(false)"> {{updatePatientMedicine? 'Update Patient Medicine' : 'Add Patient Medicine'}} </button>
+  <button type="button" [disabled]="currentUser?.userRole == 'Patient'" (click)="onSubmit(false)">
+    {{updatePatientMedicine? 'Update Patient Medicine' : 'Add Patient Medicine'}} </button>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -60,11 +98,12 @@
         <td>{{GetMedicineFullNameFromPharmacyMedicineId(patinetMedicine.pharmacyMedicinesId)}}</td>
         <td>{{patinetMedicine.insuranceAccept ? 'Aprroved' : 'Not Approved'}}</td>
         <td>
-          <button [disabled]=" currentUser.userRole == 'Patient'" type="button" (click)="editPatientMedicine(patinetMedicine)"
-            class="btn btn-sm btn-primary mr-1">
+          <button [disabled]=" currentUser.userRole == 'Patient'" type="button"
+            (click)="editPatientMedicine(patinetMedicine)" class="btn btn-sm btn-primary mr-1">
             Edit
           </button>
-          <button [disabled]=" currentUser.userRole == 'Patient'" type="button" (click)="deletePatientMedicine(patinetMedicine.pharmacyMedicinesId)"
+          <button [disabled]=" currentUser.userRole == 'Patient'" type="button"
+            (click)="deletePatientMedicine(patinetMedicine.pharmacyMedicinesId)"
             class="btn btn-sm btn-danger btn-delete-user">
             Delete
           </button>
