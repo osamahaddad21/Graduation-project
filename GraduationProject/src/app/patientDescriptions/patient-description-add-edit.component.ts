@@ -47,10 +47,12 @@ export class PatinetDescriptionsAddEditComponent implements OnInit {
       .pipe(first())
       .subscribe(users => this.users = users.filter(u=>u.userRole=='Patient'));
     this.form = this.formBuilder.group({
-      patientId: ['', Validators.required],
-      description : ['', Validators.required],
-      medicineDescription: ['', Validators.required]
+      patientId: [{value:'',disabled: this.currentUser?.userRole === 'Patient' || this.currentUser?.userRole === 'Pharmacist' },Validators.required],
+      description : [{value:'',disabled: this.currentUser?.userRole === 'Patient' || this.currentUser?.userRole === 'Pharmacist' }, Validators.required],
+      medicineDescription: [{value:'',disabled: this.currentUser?.userRole === 'Patient' || this.currentUser?.userRole === 'Pharmacist' }, Validators.required]
     });
+  
+
     this.pharmacyBranchesService.getAll()
       .pipe(first())
       .subscribe(pharmacyBranches => this.pharmacyBranches = pharmacyBranches);
@@ -65,11 +67,7 @@ export class PatinetDescriptionsAddEditComponent implements OnInit {
     this.medicinesService.getAll()
       .pipe(first())
       .subscribe(medicines => this.medicines = medicines);
-    this.form = this.formBuilder.group({
-      patientId: ['', Validators.required],
-      description:['', Validators.required],
-      medicineDescription: ['', Validators.required],
-    });
+    
     if (!this.isAddMode) {
       this.patinetDescriptionService.getById(this.id)
         .pipe(first())
@@ -279,6 +277,7 @@ export class PatinetDescriptionsAddEditComponent implements OnInit {
   ChangeMedicinePrice(event){
     debugger
     const insuranceP = (event.target as HTMLSelectElement).value ;
+    this.insurancePrecentage =Number (insuranceP);
     this.medicinePrice=this.medicinePrice- (this.medicinePrice *( Number(insuranceP) /100))
   }
 }

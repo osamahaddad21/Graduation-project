@@ -4,7 +4,7 @@
   <div class="form-row">
     <div class="form-group col">
       <label for="patientId">Patient Name</label>
-      <select [disabled]="currentUser?.userRole == 'Patient'" formControlName="patientId" class="form-control"
+      <select  [disabled]="currentUser?.userRole == 'Patient' || currentUser?.userRole == 'Pharmacist'" formControlName="patientId" class="form-control"
         [ngClass]="{ 'is-invalid': submitted && f.patientId.errors }">
         <option *ngFor="let user of users" [value]="user.id">{{user.firstName}} - {{user.lastName}}</option>
       </select>
@@ -16,7 +16,7 @@
   <div class="form-row">
     <div class="form-group col">
       <label for="description">Description</label>
-      <input [disabled]="currentUser?.userRole == 'Patient'" type="text" formControlName="description"
+      <input [disabled]="currentUser?.userRole == 'Patient' || currentUser?.userRole == 'Pharmacist'"  type="text" formControlName="description"
         class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }" />
 
       <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
@@ -27,7 +27,7 @@
   <div class="form-row">
     <div class="form-group col">
       <label for="medicineDescription">Medicine Description</label>
-      <input [disabled]="currentUser?.userRole == 'Patient'" type="text" formControlName="medicineDescription"
+      <input [disabled]="currentUser?.userRole == 'Patient' || currentUser?.userRole == 'Pharmacist'"  type="text" formControlName="medicineDescription"
         class="form-control" [ngClass]="{ 'is-invalid': submitted && f.medicineDescription.errors }" />
 
       <div *ngIf="submitted && f.medicineDescription.errors" class="invalid-feedback">
@@ -39,8 +39,8 @@
   <h1>Patient Medicines</h1>
   <div class="form-row">
     <div class="form-group col">
-      <label for="patientId">Pharmacy Name</label>
-      <select [disabled]="currentUser?.userRole == 'Patient'" class="form-control" [ngModelOptions]="{standalone: true}"
+      <label for="PharmacyName">Pharmacy Name</label>
+      <select [disabled]="currentUser?.userRole == 'Patient' || currentUser?.userRole == 'Pharmacist'" class="form-control" [ngModelOptions]="{standalone: true}"
       (change)="SelectPharmacyMedicines($event)"  [(ngModel)]="pselected">
         <option disabled selected [value]="''">Please Select</option>
         <option *ngFor="let pharmacyBranch of pharmacyBranches" [value]="pharmacyBranch.id">
@@ -50,7 +50,7 @@
     </div>
     <div class="form-group col">
       <label for="patientId">Medicine Name</label>
-      <select [disabled]="currentUser?.userRole == 'Patient'" class="form-control" [ngModelOptions]="{standalone: true}"
+      <select [disabled]="currentUser?.userRole == 'Patient' || currentUser?.userRole == 'Pharmacist'" class="form-control" [ngModelOptions]="{standalone: true}"
         (change)="SelectMedicine($event)" [(ngModel)]="selected">
         <option disabled selected [value]="''">Please Select</option>
         <option *ngFor="let pharmacyMedicine of pharmacyMedicinesForPharmacy" [value]="pharmacyMedicine.id">
@@ -76,11 +76,11 @@
     </div>
     <div class="form-group col">
       <label for="insurancePrecentage">Insurance Precentage</label>
-      <input type="number"  [(ngModel)]="insurancePrecentage"  (change)="ChangeMedicinePrice($event)" class="form-control" />
+      <input type="number"   [value]="insurancePrecentage"[(ngModel)]="insurancePrecentage"  (change)="ChangeMedicinePrice($event)" class="form-control" />
     </div>
     <div class="form-group col">
       <label for="medicinePrice">Medicine Price</label>
-      <input disabled type="number"  [(ngModel)]="medicinePrice" class="form-control"/>
+      <input disabled type="number"  [value]="medicinePrice" class="form-control"/>
     </div>
   </div>
   <button type="button" [disabled]="currentUser?.userRole == 'Patient'" (click)="onSubmit(false)">

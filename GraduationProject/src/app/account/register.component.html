@@ -29,7 +29,7 @@
       <div class="form-group">
         <div class="form-group col">
           <label for="userRole">Role</label>
-          <select formControlName="userRole" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.userRole.errors }">
+          <select [(ngModel)]="selectedBranch"  (change)="SelectBranch($event)" formControlName="userRole" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.userRole.errors }">
             <option [value]="'Physician'">Physician</option>
             <option [value]="'Pharmacist'">Pharmacist</option>
             <option [value]="'Patient'">Patient</option>
@@ -38,6 +38,12 @@
           <div *ngIf="submitted && f.userRole.errors" class="invalid-feedback">
             <div *ngIf="f.userRole.errors.required">Role is required</div>
           </div>
+        </div>
+        <div *ngIf="selectedBranch=='Pharmacist'" class="form-group col">
+          <label for="userPharmacy">Pharmacy Name</label>
+          <select formControlName="userPharmacy" class="form-control" >
+            <option *ngFor="let pharmacy of pharmacyBranches" [value]="pharmacy.id" >{{GetPharmacyFullName(pharmacy)}}</option>
+          </select>
         </div>
       </div>
       <div class="form-group">

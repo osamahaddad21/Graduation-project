@@ -4,12 +4,14 @@
     <thead>
         <tr>
             <th style="width: 30%"> Name</th>
+            <th style="width: 30%"> Price</th>
             <th style="width: 10%"></th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let medicine of medicines">
             <td>{{medicine.name}}</td>
+            <td>{{medicine.price}}</td>
             <td style="white-space: nowrap">
                 <a routerLink="edit/{{medicine.id}}" class="btn btn-sm btn-primary mr-1">Edit</a>
                 <button (click)="deleteMedicine(medicine.id)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="medicine.isDeleting">

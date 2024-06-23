@@ -7,7 +7,7 @@ const pharmacyService = require('./pharmacy.service');
 
 // routes
 router.post('/create', createSchema, create);
-router.get('/', authorize(), getAll);
+router.get('/',  getAll);
 router.get('/:id', authorize(), getById);
 router.put('/:id', authorize(), updateSchema, update);
 router.delete('/:id', authorize(), _delete);

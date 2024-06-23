@@ -14,7 +14,7 @@ export class AddEditComponent implements OnInit {
     submitted = false;
     currentUser = null;
     pharmacies:Pharmacy[];
-    pharmacyBranches:Pharmacy[];
+    pharmacyBranches:PharmacyBranches[];
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
