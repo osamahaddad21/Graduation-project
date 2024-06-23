@@ -36,6 +36,7 @@ function registerSchema(req, res, next) {
         lastName: Joi.string().required(),
         userName: Joi.string().required(),
         userRole: Joi.string().required(),
+        userPharmacy: Joi.string().empty(''),
         password: Joi.string().min(6).required()
     });
     validateRequest(req, next, schema);
